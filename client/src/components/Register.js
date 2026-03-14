@@ -72,7 +72,6 @@ function Register() {
             
             <form onSubmit={handleSubmit}>
             
-            {/* Role Toggle */}
             <div className="d-flex bg-light rounded-3 p-1 mb-4 border">
                 <button type="button" 
                     className={`btn w-50 rounded-2 fw-bold border-0 ${formData.role === 'student' ? 'bg-white shadow-sm text-dark' : 'bg-transparent text-muted'}`}
@@ -86,9 +85,15 @@ function Register() {
                 </button>
             </div>
 
-            <div className="mb-3">
-                <label className="form-label small fw-bold text-dark">Full Name</label>
-                <input type="text" name="name" className="form-control px-3 py-2 bg-light border-0" onChange={handleChange} required placeholder="John Doe" />
+            <div className="row g-3 mb-3">
+                <div className="col-sm-6">
+                    <label className="form-label small fw-bold text-dark">Full Name</label>
+                    <input type="text" name="name" className="form-control px-3 py-2 bg-light border-0" onChange={handleChange} required placeholder="John Doe" />
+                </div>
+                <div className="col-sm-6">
+                    <label className="form-label small fw-bold text-dark">Phone</label>
+                    <input type="tel" className="form-control px-3 py-2 bg-light border-0" placeholder="+91 98765 43210" />
+                </div>
             </div>
 
             <div className="mb-3">
@@ -98,8 +103,18 @@ function Register() {
             
             <div className="mb-4">
                 <label className="form-label small fw-bold text-dark">Password</label>
-                <input type="password" name="password" className="form-control px-3 py-2 bg-primary-brand bg-opacity-10 border-0 shadow-none" onChange={handleChange} required placeholder="••••••••" />
+                <div className="input-group">
+                    <input type="password" name="password" className="form-control px-3 py-2 bg-primary-brand bg-opacity-10 border-0 shadow-none" onChange={handleChange} required placeholder="••••••••" />
+                    <span className="input-group-text bg-primary-brand bg-opacity-10 border-0"><i className="fas fa-eye text-muted"></i></span>
+                </div>
             </div>
+
+            {formData.role === 'student' && (
+                <div className="mb-4">
+                    <label className="form-label small fw-bold text-dark">College / University</label>
+                    <input type="text" className="form-control px-3 py-2 bg-light border-0" placeholder="e.g. IIT Bombay" />
+                </div>
+            )}
 
             <button type="submit" className="btn btn-premium w-100 py-2 fs-5 mt-2 rounded-3">Create Account</button>
 
