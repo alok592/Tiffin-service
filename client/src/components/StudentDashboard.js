@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-
-const API = "https://tiffin-service-arb4.onrender.com";
+import API from "../api";
 
 function StudentDashboard() {
 
@@ -29,7 +28,13 @@ function StudentDashboard() {
 
     fetch(`${API}/api/providers`)
       .then(res => res.json())
-      .then(data => setNearbyMesses(data))
+      .then(data => {
+        if (Array.isArray(data)) {
+          setNearbyMesses(data);
+        } else {
+          setNearbyMesses([]);
+        }
+      })
       .catch(err => console.error(err));
 
 
@@ -40,6 +45,8 @@ function StudentDashboard() {
     fetch(`${API}/api/orders`)
       .then(res => res.json())
       .then(data => {
+
+        if (!Array.isArray(data)) return;
 
         const studentOrders = data.filter(
           o => o.mobile === storedUser.email
@@ -73,12 +80,10 @@ function StudentDashboard() {
   }, [navigate]);
 
 
-
   const handleLogout = () => {
     localStorage.removeItem("user");
     navigate('/login');
   };
-
 
 
   return (
@@ -107,21 +112,22 @@ function StudentDashboard() {
             Welcome, {user?.name} 👋
           </span>
 
-          <button onClick={handleLogout}
+          <button
+            onClick={handleLogout}
             style={{
               background: "#f3f4f6",
               border: "none",
               padding: "8px 15px",
               borderRadius: "8px",
               cursor: "pointer"
-            }}>
+            }}
+          >
             Logout
           </button>
 
         </div>
 
       </header>
-
 
 
       <main style={{ padding: "40px" }}>
@@ -179,7 +185,6 @@ function StudentDashboard() {
           </div>
 
         </div>
-
 
 
         {/* Orders */}
