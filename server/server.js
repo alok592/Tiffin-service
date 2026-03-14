@@ -8,19 +8,33 @@ const jwt = require('jsonwebtoken');
 const app = express();
 
 /* =======================
-   MIDDLEWARE
+   CORS FIX
 ======================= */
 
-app.use(cors({
-  origin: "*",
-  methods: ["GET","POST","PUT","DELETE"],
-  allowedHeaders: ["Content-Type","Authorization"]
-}));
+const corsOptions = {
+  origin: [
+    "https://tiffin-service-chi.vercel.app",
+    "http://localhost:3000"
+  ],
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"],
+  credentials: true
+};
 
-app.use(express.json({ limit: "50mb" }));
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // important for preflight
+
+/* =======================
+   BODY PARSER
+======================= */
+
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Request Logger
+/* =======================
+   REQUEST LOGGER
+======================= */
+
 app.use((req, res, next) => {
   console.log(`👉 ${req.method} ${req.url}`);
   next();
@@ -32,16 +46,11 @@ app.use((req, res, next) => {
 
 const connectDB = async () => {
   try {
-
     await mongoose.connect(process.env.MONGO_URI);
-
     console.log("✅ MongoDB Connected Successfully");
-
   } catch (err) {
-
     console.error("❌ MongoDB Error:", err.message);
     process.exit(1);
-
   }
 };
 
@@ -77,8 +86,9 @@ app.post('/api/auth/register', async (req, res) => {
 
     const existingUser = await User.findOne({ email });
 
-    if (existingUser)
+    if (existingUser) {
       return res.status(400).json({ msg: "User already exists" });
+    }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -144,7 +154,6 @@ app.post('/api/auth/login', async (req, res) => {
   }
 
 });
-
 
 /* =======================
    PROVIDER ROUTES
@@ -249,7 +258,6 @@ app.put('/api/providers/:id', async (req, res) => {
 
 });
 
-
 /* =======================
    ORDERS ROUTES
 ======================= */
@@ -309,7 +317,6 @@ app.put('/api/orders/:id', async (req, res) => {
 
 });
 
-
 /* =======================
    SERVER START
 ======================= */
@@ -317,7 +324,5 @@ app.put('/api/orders/:id', async (req, res) => {
 const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {
-
   console.log(`🚀 Professional Server running on Port ${PORT}`);
-
 });
