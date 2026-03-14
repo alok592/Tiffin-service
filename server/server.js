@@ -22,7 +22,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // important for preflight
 
 /* =======================
    BODY PARSER
@@ -77,7 +76,6 @@ app.get("/", (req, res) => {
 ======================= */
 
 app.post('/api/auth/register', async (req, res) => {
-
   try {
 
     console.log("Register request:", req.body);
@@ -105,17 +103,12 @@ app.post('/api/auth/register', async (req, res) => {
     res.json({ msg: "Registration Successful" });
 
   } catch (err) {
-
     console.error(err);
     res.status(500).json({ msg: "Server Error" });
-
   }
-
 });
 
-
 app.post('/api/auth/login', async (req, res) => {
-
   try {
 
     const { email, password } = req.body;
@@ -147,12 +140,9 @@ app.post('/api/auth/login', async (req, res) => {
     });
 
   } catch (err) {
-
     console.error(err);
     res.status(500).json({ msg: "Login error" });
-
   }
-
 });
 
 /* =======================
@@ -160,7 +150,6 @@ app.post('/api/auth/login', async (req, res) => {
 ======================= */
 
 app.get('/api/providers', async (req, res) => {
-
   try {
 
     const { lat, lng } = req.query;
@@ -191,17 +180,12 @@ app.get('/api/providers', async (req, res) => {
     }
 
   } catch (err) {
-
     console.error(err);
     res.status(500).json({ msg: "Error fetching providers" });
-
   }
-
 });
 
-
 app.get('/api/providers/:id', async (req, res) => {
-
   try {
 
     const provider = await Provider.findById(req.params.id);
@@ -212,16 +196,11 @@ app.get('/api/providers/:id', async (req, res) => {
     res.json(provider);
 
   } catch (err) {
-
     res.status(500).json({ msg: "Server Error" });
-
   }
-
 });
 
-
 app.post('/api/providers', async (req, res) => {
-
   try {
 
     const newProvider = new Provider(req.body);
@@ -230,16 +209,11 @@ app.post('/api/providers', async (req, res) => {
     res.json({ msg: "Mess Added Successfully" });
 
   } catch (err) {
-
     res.status(500).json({ msg: "Error adding mess" });
-
   }
-
 });
 
-
 app.put('/api/providers/:id', async (req, res) => {
-
   try {
 
     const updated = await Provider.findByIdAndUpdate(
@@ -251,11 +225,8 @@ app.put('/api/providers/:id', async (req, res) => {
     res.json(updated);
 
   } catch (err) {
-
     res.status(500).json({ msg: "Error updating mess" });
-
   }
-
 });
 
 /* =======================
@@ -263,7 +234,6 @@ app.put('/api/providers/:id', async (req, res) => {
 ======================= */
 
 app.get('/api/orders', async (req, res) => {
-
   try {
 
     const orders = await Order.find().sort({ createdAt: -1 });
@@ -271,16 +241,11 @@ app.get('/api/orders', async (req, res) => {
     res.json(orders);
 
   } catch (err) {
-
     res.status(500).json({ msg: "Error fetching orders" });
-
   }
-
 });
 
-
 app.post('/api/orders', async (req, res) => {
-
   try {
 
     const newOrder = new Order(req.body);
@@ -289,16 +254,11 @@ app.post('/api/orders', async (req, res) => {
     res.json(newOrder);
 
   } catch (err) {
-
     res.status(500).json({ msg: "Error creating order" });
-
   }
-
 });
 
-
 app.put('/api/orders/:id', async (req, res) => {
-
   try {
 
     const updatedOrder = await Order.findByIdAndUpdate(
@@ -310,11 +270,8 @@ app.put('/api/orders/:id', async (req, res) => {
     res.json(updatedOrder);
 
   } catch (err) {
-
     res.status(500).json({ msg: "Error updating order" });
-
   }
-
 });
 
 /* =======================
