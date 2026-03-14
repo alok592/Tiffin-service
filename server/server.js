@@ -44,10 +44,6 @@ const connectDB = async () => {
 
 connectDB();
 
-};
-
-connectDB();
-
 /* =======================
    MODELS
 ======================= */
