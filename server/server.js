@@ -12,11 +12,9 @@ const app = express();
 ======================= */
 
 app.use(cors({
-  origin: [
-    "https://tiffin-service-chi.vercel.app",
-    "http://localhost:3000"
-  ],
-  credentials: true
+  origin: "*",
+  methods: ["GET","POST","PUT","DELETE"],
+  allowedHeaders: ["Content-Type","Authorization"]
 }));
 
 app.use(express.json({ limit: "50mb" }));
@@ -34,11 +32,16 @@ app.use((req, res, next) => {
 
 const connectDB = async () => {
   try {
+
     await mongoose.connect(process.env.MONGO_URI);
+
     console.log("✅ MongoDB Connected Successfully");
+
   } catch (err) {
+
     console.error("❌ MongoDB Error:", err.message);
     process.exit(1);
+
   }
 };
 
@@ -65,11 +68,15 @@ app.get("/", (req, res) => {
 ======================= */
 
 app.post('/api/auth/register', async (req, res) => {
+
   try {
+
+    console.log("Register request:", req.body);
 
     const { name, email, password, role } = req.body;
 
     const existingUser = await User.findOne({ email });
+
     if (existingUser)
       return res.status(400).json({ msg: "User already exists" });
 
@@ -88,13 +95,17 @@ app.post('/api/auth/register', async (req, res) => {
     res.json({ msg: "Registration Successful" });
 
   } catch (err) {
+
     console.error(err);
     res.status(500).json({ msg: "Server Error" });
+
   }
+
 });
 
 
 app.post('/api/auth/login', async (req, res) => {
+
   try {
 
     const { email, password } = req.body;
@@ -126,9 +137,14 @@ app.post('/api/auth/login', async (req, res) => {
     });
 
   } catch (err) {
+
+    console.error(err);
     res.status(500).json({ msg: "Login error" });
+
   }
+
 });
+
 
 /* =======================
    PROVIDER ROUTES
@@ -166,9 +182,12 @@ app.get('/api/providers', async (req, res) => {
     }
 
   } catch (err) {
+
     console.error(err);
     res.status(500).json({ msg: "Error fetching providers" });
+
   }
+
 });
 
 
@@ -184,7 +203,9 @@ app.get('/api/providers/:id', async (req, res) => {
     res.json(provider);
 
   } catch (err) {
+
     res.status(500).json({ msg: "Server Error" });
+
   }
 
 });
@@ -200,7 +221,9 @@ app.post('/api/providers', async (req, res) => {
     res.json({ msg: "Mess Added Successfully" });
 
   } catch (err) {
+
     res.status(500).json({ msg: "Error adding mess" });
+
   }
 
 });
@@ -219,10 +242,13 @@ app.put('/api/providers/:id', async (req, res) => {
     res.json(updated);
 
   } catch (err) {
+
     res.status(500).json({ msg: "Error updating mess" });
+
   }
 
 });
+
 
 /* =======================
    ORDERS ROUTES
@@ -237,7 +263,9 @@ app.get('/api/orders', async (req, res) => {
     res.json(orders);
 
   } catch (err) {
+
     res.status(500).json({ msg: "Error fetching orders" });
+
   }
 
 });
@@ -253,7 +281,9 @@ app.post('/api/orders', async (req, res) => {
     res.json(newOrder);
 
   } catch (err) {
+
     res.status(500).json({ msg: "Error creating order" });
+
   }
 
 });
@@ -272,10 +302,13 @@ app.put('/api/orders/:id', async (req, res) => {
     res.json(updatedOrder);
 
   } catch (err) {
+
     res.status(500).json({ msg: "Error updating order" });
+
   }
 
 });
+
 
 /* =======================
    SERVER START
@@ -284,5 +317,7 @@ app.put('/api/orders/:id', async (req, res) => {
 const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {
+
   console.log(`🚀 Professional Server running on Port ${PORT}`);
+
 });
