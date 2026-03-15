@@ -11,8 +11,6 @@ const app = express();
    CORS FIX
 ======================= */
 
-
-
 const corsOptions = {
   origin: [
     "https://tiffin-service-chi.vercel.app",
@@ -25,8 +23,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-/* Handle preflight requests */
-app.options("*", cors(corsOptions));
+/* Handle preflight */
+app.options("/*", cors(corsOptions));
 
 /* =======================
    BODY PARSER
