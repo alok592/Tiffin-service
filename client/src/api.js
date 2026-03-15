@@ -1,3 +1,3 @@
-const API = "https://tiffin-service-arb4.onrender.com";
+const API = "/api";
 
 export default API;
