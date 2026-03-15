@@ -5,12 +5,12 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import API from '../api'; // ✅ FIXED: moved to top level
 
 // Map Icon Fix
 let DefaultIcon = L.icon({ iconUrl: icon, shadowUrl: iconShadow, iconSize: [25, 41], iconAnchor: [12, 41] });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// ✅ NEW STABLE IMAGES (Ye kabhi gayab nahi hongi)
 const foodImages = [
   "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600",
   "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -25,11 +25,9 @@ function Home() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  import API from './api'; // adjust path if needed
-
-useEffect(() => {
+  useEffect(() => {
     const fetchAllProviders = (lat = null, lng = null) => {
-      let url = `${API}/api/providers`;
+      let url = `${API}/api/providers`; // ✅ FIXED: uses Render backend URL
       if (lat && lng) url += `?lat=${lat}&lng=${lng}`;
       
       fetch(url)
@@ -69,7 +67,7 @@ useEffect(() => {
     
     const [closeH, closeM] = closingTime.split(':').map(Number);
     let closeMinutes = closeH * 60 + closeM;
-    if (closeMinutes < openMinutes) closeMinutes += 24 * 60; // handles after midnight like 23:00 to 02:00
+    if (closeMinutes < openMinutes) closeMinutes += 24 * 60;
     
     let adjustedCurrent = currentMinutes;
     if (currentMinutes < openMinutes && closeMinutes > 24*60) adjustedCurrent += 24 * 60;
@@ -264,7 +262,7 @@ useEffect(() => {
                                     alt={mess.messName} 
                                     style={{height: "260px", objectFit: "cover"}}
                                     onError={(e) => {
-                                        e.target.style.display = 'none'; // If the owner's link is broken, hide it
+                                        e.target.style.display = 'none';
                                     }}
                                 />
                             ) : (
