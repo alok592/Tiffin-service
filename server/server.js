@@ -16,15 +16,12 @@ const corsOptions = {
     "https://tiffin-service-chi.vercel.app",
     "http://localhost:3000"
   ],
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  methods: ["GET","POST","PUT","DELETE"],
   allowedHeaders: ["Content-Type","Authorization"],
   credentials: true
 };
 
 app.use(cors(corsOptions));
-
-/* Handle preflight */
-app.options("/*", cors(corsOptions));
 
 /* =======================
    BODY PARSER
